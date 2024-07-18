@@ -23,13 +23,13 @@ export default function SelectLabels({ data }) {
     const newStatus = event.target.value;
     setStatus(newStatus);
     try {
-      await axios.post('http://localhost:6990/api/updateStatus', {
+      await axios.post('http://51.20.225.234:6990/api/updateStatus', {
         id: data.id,
         status: newStatus,
       },
       {headers: {Authorization: localStorage.getItem('token')}}
     );
-      await axios.post('http://localhost:6990/api/send-status-messages', {
+      await axios.post('http://51.20.225.234:6990/api/send-status-messages', {
         telegram_id: data.telegram_id,
         message: newStatus + 'ba privet inch ka',
         headers: {Authorization: localStorage.getItem('token')}

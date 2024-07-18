@@ -15,7 +15,7 @@ const SellPMTable = () => {
     const fetchData = useCallback(async (pageSize, pageIndex) => {
         try {
             const offset = pageIndex * pageSize;
-            const response = await axios.get('http://localhost:6990/api/get-sell-data', {
+            const response = await axios.get('http://51.20.225.234:6990/api/get-sell-data', {
                 params: {
                     limit: pageSize,
                     offset: offset
