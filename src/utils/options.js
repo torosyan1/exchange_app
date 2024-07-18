@@ -32,7 +32,9 @@ export default function SelectLabels({ data }) {
       await axios.post('http://51.20.225.234:6990/api/send-status-messages', {
         telegram_id: data.telegram_id,
         message: newStatus + 'ba privet inch ka',
-        headers: {Authorization: localStorage.getItem('token')}
+      },{
+        headers: {Authorization: localStorage.getItem('token')
+}
       });
       console.log(`Status updated to ${newStatus} for id ${data.id}`);
       setAlert({ show: true, message: 'Status updated successfully!', severity: 'success' });
