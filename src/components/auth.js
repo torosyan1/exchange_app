@@ -41,7 +41,7 @@ export default function SignInSide() {
 
         try {
             // Make API call
-            const response = await axios.post('http://51.20.225.234/api/login', {
+            const response = await axios.post('http://51.20.225.234:6990/api/login', {
                 username: email,
                 password
             });
