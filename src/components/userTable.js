@@ -22,7 +22,8 @@ const DataTable = () => {
                 },
                 headers: {Authorization: localStorage.getItem('token')}
             });
-            setData(response.data.data);
+            const data = response.data.data.reverse().sort((a, b) => a.verified - b.verified);
+            setData(data);
             setPageCount(Math.ceil(response.data.totoalCount[0].total / pageSize));
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -51,7 +52,7 @@ const DataTable = () => {
     const handleTableChange = useCallback((paginationOptions) => {
         const { pageIndex: newPageIndex, pageSize: newPageSize } = paginationOptions;
         setPageIndex(newPageIndex);
-        setPageSize(newPageSize);
+        setPageSize(newPageSize - 40);
     }, []);
 
     return (

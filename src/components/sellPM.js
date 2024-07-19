@@ -22,7 +22,8 @@ const SellPMTable = () => {
                 },
                 headers: {Authorization: localStorage.getItem('token')}
             });
-            setData(response.data.data);
+            const data = response.data.data.reverse().sort((a, b) => a.verified - b.verified);
+            setData(data);
             setPageCount(Math.ceil(response.data.totoalCount[0].total / pageSize));
         } catch (error) {
             console.error('Error fetching data:', error);
