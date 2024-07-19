@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
@@ -14,8 +14,7 @@ import { AuthProvider, useAuth } from './context/authContext';
 
 const PrivateRoute = ({ element: Component, ...rest }) => {
   const { isAuthenticated } = useAuth();
-  
-  return isAuthenticated ? <Component {...rest} /> : <Navigate to="/" />;
+  return isAuthenticated ? <Component {...rest} /> : null;
 };
 
 

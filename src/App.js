@@ -21,6 +21,7 @@ import GroupIcon from '@mui/icons-material/Group';
 import MessageIcon from '@mui/icons-material/Message';
 import SellIcon from '@mui/icons-material/Sell';
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
+import LogoutIcon from '@mui/icons-material/Logout';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 const drawerWidth = 240;
@@ -112,7 +113,13 @@ export default function App({ Component }) {
 
   // Handle navigation
   const handleNavigation = (path) => {
-    navigate(path);
+    console.log(path)
+    if(path === '/logout') {
+      localStorage.removeItem('token');
+      navigate('/')
+    } else {
+      navigate(path);
+    }
   };
 
   // Map for icons
@@ -122,8 +129,8 @@ export default function App({ Component }) {
     'Messages': <MessageIcon />,
     'BuyPM': <ShoppingBagIcon />,
     'SellPM': <SellIcon />,
+    'Logout': <LogoutIcon/>
   };
-
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -179,6 +186,31 @@ export default function App({ Component }) {
           ))}
         </List>
         <Divider />
+        <List>
+          {['Logout'].map((text) => (
+            <ListItem key={text} disablePadding sx={{ display: 'block' }}>
+              <ListItemButton
+                onClick={() => handleNavigation(`/${text.toLowerCase()}`)} // Navigate on click
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? 'initial' : 'center',
+                  px: 2.5,
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : 'auto',
+                    justifyContent: 'center',
+                  }}
+                >
+                  {iconMap[text]} {/* Use iconMap for icons */}
+                </ListItemIcon>
+                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3, marginTop: '5%' }}>
         <Component /> {/* Render the passed Component */}

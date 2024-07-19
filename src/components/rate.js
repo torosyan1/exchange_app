@@ -37,7 +37,7 @@ function RateChanger() {
   useEffect(() => {
     const fetchLastRate = async () => {
       try {
-        const response = await fetch('http://localhost:6990/api/last-rate');
+        const response = await fetch('http://51.20.225.234:6990/api/last-rate', { headers: { Authorization: localStorage.getItem('token') }});
         if (response.ok) {
           const lastRate = await response.json();
           setRate(lastRate.value || 0);

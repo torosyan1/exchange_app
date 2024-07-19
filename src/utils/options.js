@@ -18,7 +18,6 @@ export default function SelectLabels({ data }) {
   } else if(status === 2) {
     colorStatus = 'red'
   }
-  console.log(data)
   const handleChange = async (event) => {
     const newStatus = event.target.value;
     setStatus(newStatus);
@@ -36,7 +35,6 @@ export default function SelectLabels({ data }) {
         headers: {Authorization: localStorage.getItem('token')
 }
       });
-      console.log(`Status updated to ${newStatus} for id ${data.id}`);
       setAlert({ show: true, message: 'Status updated successfully!', severity: 'success' });
     } catch (error) {
       console.error('Error updating status:', error);

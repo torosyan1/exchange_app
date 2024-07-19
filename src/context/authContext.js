@@ -1,33 +1,28 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
+      if (location.pathname === '/') {
+        navigate('/users');
+      }
       setIsAuthenticated(true);
+    } else {
+      navigate('/');
     }
-  }, []);
-
-  const login = () => {
-    localStorage.setItem('token', 'your-token'); // Store token in local storage
-    setIsAuthenticated(true);
-    navigate('/users'); // Redirect to users page after login
-  };
-
-  const logout = () => {
-    localStorage.removeItem('token'); // Remove token from local storage
-    setIsAuthenticated(false);
-    navigate('/'); // Redirect to home page after logout
-  };
+    // Only run this effect once on mount
+  }, [location.pathname, navigate]);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated }}>
       {children}
     </AuthContext.Provider>
   );
