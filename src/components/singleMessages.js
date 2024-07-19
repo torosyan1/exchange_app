@@ -21,7 +21,7 @@ const ApiForm = () => {
     }
     
     try {
-      await axios.post('http://51.20.225.234:6990/api/send-status-messages', { message: inputValue, telegram_id: telegramId }, { headers: {Authorization: localStorage.getItem('token')} });
+      await axios.post('http://51.20.225.234:6990/api/send-messages', { message: inputValue, telegram_id: telegramId }, { headers: {Authorization: localStorage.getItem('token')} });
       alert('Data submitted successfully!');
       setInputValue('');
       setTelegramId('');
