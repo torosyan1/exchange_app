@@ -47,7 +47,7 @@ export default function SignInSide() {
             });
             // Save token or handle response
             localStorage.setItem('token', response.data.token); // Example: Save token to local storage
-
+            localStorage.setItem('username', response.data.username);
             // Redirect on successful login
             navigate('/users');
         } catch (error) {

@@ -25,6 +25,13 @@ export default function SelectLabels({ data, path, statusName }) {
       'buy': 'update-buy-status',
       'sell': 'update-sell-status',
     }
+    const message = {
+      auth: `
+ار اینکه از خدمات صرافچی استفاده کردید بسیار متشکریم و مفتخریم تا بزودی مجدد سعادت دیدار شما را داشته باشیم.
+با تشکر
+
+در صورت نیاز به شروع عملیات جدید لطفا از منو اصلی استفده نمایید.`
+    }
     setStatus(newStatus);
     try {
       await axios.post(`http://51.20.225.234:6990/api/${updatePath[path]}`, {
@@ -33,9 +40,11 @@ export default function SelectLabels({ data, path, statusName }) {
       },
       {headers: {Authorization: localStorage.getItem('token')}}
     );
+    console.log(message[path])
       await axios.post('http://51.20.225.234:6990/api/send-messages', {
         telegram_id: data.telegram_id,
-        message: newStatus + 'ba privet inch ka',
+        message: message[path],
+        username: localStorage.getItem('username')
       },{
         headers: {Authorization: localStorage.getItem('token')
 }

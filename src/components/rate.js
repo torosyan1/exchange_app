@@ -72,7 +72,7 @@ function RateChanger() {
         const responseSell = await fetch('http://51.20.225.234:6990/api/last-rate-sell', { headers: { Authorization: localStorage.getItem('token') }});
         if (responseSell.ok) {
           const lastRate = await responseSell.json();
-          setRateSell(lastRate.value || 0);
+          setRateSell(lastRate.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") || 0);
         } else {
           console.error('Failed to fetch last rate');
           // Handle error scenario
@@ -81,7 +81,7 @@ function RateChanger() {
         const responseBuy = await fetch('http://51.20.225.234:6990/api/last-rate-buy', { headers: { Authorization: localStorage.getItem('token') }});
         if (responseBuy.ok) {
           const lastRate = await responseBuy.json();
-          setRateBuy(lastRate.value || 0);
+          setRateBuy(lastRate.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") || 0);
         } else {
           console.error('Failed to fetch last rate');
           // Handle error scenario
