@@ -22,7 +22,7 @@ const SellPMTable = () => {
                 },
                 headers: {Authorization: localStorage.getItem('token')}
             });
-            const data = response.data.data.reverse().sort((a, b) => a.verified - b.verified);
+            const data = response.data.data.reverse().sort((a, b) => a.status - b.status);
             setData(data);
             setPageCount(Math.ceil(response.data.totoalCount[0].total / pageSize));
         } catch (error) {

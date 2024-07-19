@@ -7,7 +7,6 @@ import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 
 export default function SelectLabels({ data, path, statusName }) {
-  console.log(data)
   const [status, setStatus] = React.useState(path === 'sell' || path==='buy' ? data.status :data.verified);
   const [alert, setAlert] = React.useState({ show: false, message: '', severity: 'success' });
   let colorStatus = '';
