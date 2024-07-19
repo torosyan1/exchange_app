@@ -6,8 +6,9 @@ import axios from 'axios';
 import Alert from '@mui/material/Alert';
 import Stack from '@mui/material/Stack';
 
-export default function SelectLabels({ data }) {
-  const [status, setStatus] = React.useState(data.verified);
+export default function SelectLabels({ data, path, statusName }) {
+  console.log(data)
+  const [status, setStatus] = React.useState(path === 'sell' || path==='buy' ? data.status :data.verified);
   const [alert, setAlert] = React.useState({ show: false, message: '', severity: 'success' });
   let colorStatus = '';
 
@@ -20,15 +21,20 @@ export default function SelectLabels({ data }) {
   }
   const handleChange = async (event) => {
     const newStatus = event.target.value;
+    const updatePath = {
+      'auth': 'update-auth-status',
+      'buy': 'update-buy-status',
+      'sell': 'update-sell-status',
+    }
     setStatus(newStatus);
     try {
-      await axios.post('http://51.20.225.234:6990/api/updateStatus', {
+      await axios.post(`http://51.20.225.234:6990/api/${updatePath[path]}`, {
         id: data.id,
         status: newStatus,
       },
       {headers: {Authorization: localStorage.getItem('token')}}
     );
-      await axios.post('http://51.20.225.234:6990/api/send-status-messages', {
+      await axios.post('http://51.20.225.234:6990/api/send-messages', {
         telegram_id: data.telegram_id,
         message: newStatus + 'ba privet inch ka',
       },{
@@ -53,7 +59,7 @@ export default function SelectLabels({ data }) {
           onChange={handleChange}
         >
           <MenuItem value={0}>Pending</MenuItem>
-          <MenuItem value={1}>Approved</MenuItem>
+          <MenuItem value={1}>{ statusName ? "Done"  : "Approved"}</MenuItem>
           <MenuItem value={2}>Rejected</MenuItem>
         </Select>
       </FormControl>

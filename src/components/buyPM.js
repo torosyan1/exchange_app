@@ -42,7 +42,7 @@ const BuyPMSellTable = () => {
             { Header: 'Current rate', accessor: 'current_rate' },
             { Header: 'Created', accessor: 'created_at' },
             { Header: 'Photos', accessor: 'photo', Cell: ({ value }) => JSON.parse(value)?.map((file, i) => <a href={file} key={i}>{i}</a>) },
-            { Header: 'Status', accessor: 'status', Cell: ({ row }) => <SelectLabels data={row.original} /> },
+            { Header: 'Status', accessor: 'status', Cell: ({ row }) => <SelectLabels data={row.original} path='buy' statusName='Done' /> },
         ],
         []
     );

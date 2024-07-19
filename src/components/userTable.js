@@ -44,7 +44,7 @@ const DataTable = () => {
             { Header: 'ID Number', accessor: 'id_number' },
             { Header: 'Files', accessor: 'files', Cell: ({ value }) => JSON.parse(value).map((file, i) => <a href={file} key={i}>{i}</a>) },
             { Header: 'Telegram ID', accessor: 'telegram_id' },
-            { Header: 'Status', accessor: 'status', Cell: ({ row }) => <SelectLabels data={row.original} /> },
+            { Header: 'Status', accessor: 'status', Cell: ({ row }) => <SelectLabels data={row.original} path='auth' /> },
         ],
         []
     );

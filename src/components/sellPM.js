@@ -43,7 +43,7 @@ const SellPMTable = () => {
             { Header: 'Vaucher code', accessor: 'vaucher_code' },
             { Header: 'Vaucher code', accessor: 'activation_code' },
             { Header: 'created_at', accessor: 'created_at' },
-            { Header: 'Status', accessor: 'status', Cell: ({ row }) => <SelectLabels data={row.original} /> },
+            { Header: 'Status', accessor: 'status', Cell: ({ row }) => <SelectLabels data={row.original} path='sell' statusName='Done'  /> },
         ],
         []
     );
