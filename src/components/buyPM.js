@@ -50,7 +50,7 @@ const BuyPMSellTable = () => {
     const handleTableChange = useCallback((paginationOptions) => {
         const { pageIndex: newPageIndex, pageSize: newPageSize } = paginationOptions;
         setPageIndex(newPageIndex);
-        setPageSize(newPageSize);
+        setPageSize(newPageSize - 40);
     }, []);
 
     return (
