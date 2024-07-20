@@ -4,6 +4,7 @@ import axios from 'axios';
 import SelectLabels from '../utils/options';
 
 import './style.css';
+import { addHoursToDate } from '../helpers/dateValidation';
 
 const DataTable = () => {
     const [data, setData] = useState([]);
@@ -44,6 +45,7 @@ const DataTable = () => {
             { Header: 'ID Number', accessor: 'id_number' },
             { Header: 'Files', accessor: 'files', Cell: ({ value }) => JSON.parse(value).map((file, i) => <a href={file} key={i}>{i}</a>) },
             { Header: 'Telegram ID', accessor: 'telegram_id' },
+            { Header: 'created_at', accessor: 'created_at',  Cell: ({ value })=>addHoursToDate(value, 0) },
             { Header: 'Status', accessor: 'status', Cell: ({ row }) => <SelectLabels data={row.original} path='auth' /> },
         ],
         []
