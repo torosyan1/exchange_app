@@ -71,7 +71,7 @@ export default function SelectLabels({ data, path, statusName }) {
           <MenuItem value={0}>Pending</MenuItem>
           <MenuItem value={1}>{ statusName ? "Done"  : "Approved"}</MenuItem>
           <MenuItem value={2}>Rejected</MenuItem>
-          { path ==='sell' ? <MenuItem value={4}>Waithing</MenuItem>  : null}
+          { path ==='buy' ? <MenuItem value={4}>Waithing</MenuItem>  : null}
         </Select>
       </FormControl>
       {alert.show && (
