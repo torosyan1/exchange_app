@@ -4,6 +4,7 @@ import axios from 'axios';
 import SelectLabels from '../utils/options';
 
 import './style.css';
+import { addHoursToDate } from '../helpers/dateValidation';
 
 const SellPMTable = () => {
     const [data, setData] = useState([]);
@@ -42,7 +43,7 @@ const SellPMTable = () => {
             { Header: 'Current rate', accessor: 'current_rate' },
             { Header: 'Vaucher code', accessor: 'vaucher_code' },
             { Header: 'Vaucher code', accessor: 'activation_code' },
-            { Header: 'created_at', accessor: 'created_at' },
+            { Header: 'created_at', accessor: 'created_at',  Cell: ({ value })=>addHoursToDate(value, 0) },
             { Header: 'Status', accessor: 'status', Cell: ({ row }) => <SelectLabels data={row.original} path='sell' statusName='Done'  /> },
         ],
         []

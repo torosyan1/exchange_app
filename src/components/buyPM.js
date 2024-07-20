@@ -4,6 +4,7 @@ import axios from 'axios';
 import SelectLabels from '../utils/options';
 
 import './style.css';
+import { addHoursToDate } from '../helpers/dateValidation';
 
 const BuyPMSellTable = () => {
     const [data, setData] = useState([]);
@@ -40,7 +41,7 @@ const BuyPMSellTable = () => {
             { Header: 'Amount', accessor: 'amount' },
             { Header: 'Telegram ID', accessor: 'telegram_id' },
             { Header: 'Current rate', accessor: 'current_rate' },
-            { Header: 'Created', accessor: 'created_at' },
+            { Header: 'Created', accessor: 'created_at', Cell: ({ value })=>addHoursToDate(value, 0)},
             { Header: 'Photos', accessor: 'photo', Cell: ({ value }) => JSON.parse(value)?.map((file, i) => <a href={file} key={i}>{i}</a>) },
             { Header: 'Status', accessor: 'status', Cell: ({ row }) => <SelectLabels data={row.original} path='buy' statusName='Done' /> },
         ],
