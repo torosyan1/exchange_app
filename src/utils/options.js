@@ -17,6 +17,8 @@ export default function SelectLabels({ data, path, statusName }) {
     colorStatus ='green'
   } else if(status === 2) {
     colorStatus = 'red'
+  }else if(status === 4) {
+    colorStatus = 'gray'
   }
   const handleChange = async (event) => {
     const newStatus = event.target.value;
