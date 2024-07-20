@@ -38,11 +38,12 @@ const SellPMTable = () => {
     const columns = useMemo(
         () => [
             { Header: 'id', accessor: 'id' },
-            { Header: 'Amount', accessor: 'amount' },
-            { Header: 'Telegram ID', accessor: 'telegram_id' },
+            { Header: 'Amount USD', accessor: 'amount' },
+            { Header: 'Amount TOMAN', accessor: 'amount_toman', Cell: ({ row })=>row.original.amount *  row.original.current_rate},
             { Header: 'Current rate', accessor: 'current_rate' },
             { Header: 'Vaucher code', accessor: 'vaucher_code' },
             { Header: 'Vaucher code', accessor: 'activation_code' },
+            { Header: 'Telegram ID', accessor: 'telegram_id' },
             { Header: 'created_at', accessor: 'created_at',  Cell: ({ value })=>addHoursToDate(value, 0) },
             { Header: 'Status', accessor: 'status', Cell: ({ row }) => <SelectLabels data={row.original} path='sell' statusName='Done'  /> },
         ],

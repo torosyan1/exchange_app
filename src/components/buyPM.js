@@ -38,9 +38,10 @@ const BuyPMSellTable = () => {
     const columns = useMemo(
         () => [
             { Header: 'id', accessor: 'id' },
-            { Header: 'Amount', accessor: 'amount' },
-            { Header: 'Telegram ID', accessor: 'telegram_id' },
+            { Header: 'Amount USD', accessor: 'amount' },
+            { Header: 'Amount TOMAN', accessor: 'amount_toman', Cell: ({ row })=>row.original.amount *  row.original.current_rate},
             { Header: 'Current rate', accessor: 'current_rate' },
+            { Header: 'Telegram ID', accessor: 'telegram_id' },
             { Header: 'Created', accessor: 'created_at', Cell: ({ value })=>addHoursToDate(value, 0)},
             { Header: 'Photos', accessor: 'photo', Cell: ({ value }) => JSON.parse(value)?.map((file, i) => <a href={file} key={i}>{i}</a>) },
             { Header: 'Status', accessor: 'status', Cell: ({ row }) => <SelectLabels data={row.original} path='buy' statusName='Done' /> },
