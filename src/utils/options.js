@@ -26,11 +26,13 @@ export default function SelectLabels({ data, path, statusName }) {
       'sell': 'update-sell-status',
     }
     const message = {
-      auth: `
+      'auth': `
 ار اینکه از خدمات صرافچی استفاده کردید بسیار متشکریم و مفتخریم تا بزودی مجدد سعادت دیدار شما را داشته باشیم.
 با تشکر
 
-در صورت نیاز به شروع عملیات جدید لطفا از منو اصلی استفده نمایید.`
+در صورت نیاز به شروع عملیات جدید لطفا از منو اصلی استفده نمایید.`,
+'sell': 'sell',
+'buy': 'buty'
     }
     setStatus(newStatus);
     try {
