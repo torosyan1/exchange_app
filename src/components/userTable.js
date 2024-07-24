@@ -43,7 +43,7 @@ const DataTable = () => {
             { Header: 'Bank Card Number', accessor: 'bank_card_number' },
             { Header: 'Bank Name', accessor: 'bank_name' },
             { Header: 'ID Number', accessor: 'id_number' },
-            { Header: 'Files', accessor: 'files', Cell: ({ value }) => JSON.parse(value).map((file, i) => <a href={file} key={i}>{i}</a>) },
+            { Header: 'Files', accessor: 'files', Cell: ({ value }) => JSON.parse(value)?.map((file, i) => <a href={file} key={i}>{i}</a>) },
             { Header: 'Telegram ID', accessor: 'telegram_id' },
             { Header: 'created_at', accessor: 'created_at',  Cell: ({ value })=>addHoursToDate(value, 0) },
             { Header: 'Status', accessor: 'status', Cell: ({ row }) => <SelectLabels data={row.original} path='auth' /> },

@@ -19,6 +19,10 @@ export default function SelectLabels({ data, path, statusName }) {
     colorStatus = 'red'
   }else if(status === 4) {
     colorStatus = 'gray'
+  }else if(status === 6){
+    colorStatus='#00FFFF'
+  }else if(status === 6){
+    colorStatus='black'
   }
   const handleChange = async (event) => {
     const newStatus = event.target.value;
@@ -74,6 +78,9 @@ export default function SelectLabels({ data, path, statusName }) {
           <MenuItem value={1}>{ statusName ? "Done"  : "Approved"}</MenuItem>
           <MenuItem value={2}>Rejected</MenuItem>
           { path ==='buy' ? <MenuItem value={4}>Waithing</MenuItem>  : null}
+          { path ==='auth' ? <MenuItem  value={6}>New</MenuItem>  : null}
+          { path ==='auth' ? <MenuItem value={5}>Leaved</MenuItem>  : null}
+
         </Select>
       </FormControl>
       {alert.show && (
