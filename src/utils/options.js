@@ -32,7 +32,7 @@ export default function SelectLabels({ data, path, statusName }) {
       'sell': 'update-sell-status',
     }
     const message = {
-      [`auth-${2}`]: `کاربر گرامی متاسفانه احراز هویت شما بنا به یکی از دلایل زیر ناموفق بوده است.
+      "auth-2": `کاربر گرامی متاسفانه احراز هویت شما بنا به یکی از دلایل زیر ناموفق بوده است.
 - وارد کردن اشتباه نام و نام خانوادگی
 - وارد کردن اشتباه شماره کارت بانکی
 - وارد کردن اشتباه نام بانک
@@ -41,30 +41,31 @@ export default function SelectLabels({ data, path, statusName }) {
 - عدم همخوانی اطلاعات کارت ملی با اطلاعات بانکی
 
 لطفا" مراحل را مجدد انجام دهید و دقت کنید تا تمام اطلاعات دقیق و کامل نوشته شود`,
-[`auth-${1}`]: `احراز هویت انجام شد.
+"auth-1": `احراز هویت انجام شد.
 
 مدارک شما بررسی و احراز هویت شما موفقیت آمیز بود 
 
 از این پس شما میتوانید به راحتی فقط با چند کلیک ارز بخرید یا بفروشید.
 
 موفق باشید.`,
-[`auth-${0}`]: `در حین بررسی مدارک ارسالی شما مشکلی پیش آمده ،
+"auth-0": `در حین بررسی مدارک ارسالی شما مشکلی پیش آمده ،
  چند لحظه صبر کنید تا توضیحات دقیق در رابطه با مشکل پیش آمده را پشتیبان های ما به اطلاع شما برسانند`,
 
 // 'sell': 'sell',
 // 'buy': 'buty'
     }
     setStatus(newStatus);
+    console.log(message[`${path}-${newStatus}`], `${path}-${newStatus}`)
     try {
       await axios.post(`http://51.20.225.234:6990/api/${updatePath[path]}`, {
         id: data.id,
-        status: message[`${path}-${status}`],
+        status: newStatus,
       },
       {headers: {Authorization: localStorage.getItem('token')}}
     );
       await axios.post('http://51.20.225.234:6990/api/send-messages', {
         telegram_id: data.telegram_id,
-        message: message[path],
+        message: message[`${path}-${newStatus}`],
         username: localStorage.getItem('username')
       },{
         headers: {Authorization: localStorage.getItem('token')
