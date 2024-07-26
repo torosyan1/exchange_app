@@ -58,7 +58,7 @@ export default function SelectLabels({ data, path, statusName }) {
     try {
       await axios.post(`http://51.20.225.234:6990/api/${updatePath[path]}`, {
         id: data.id,
-        status: message[`${updatePath}-${status}`],
+        status: message[`${path}-${status}`],
       },
       {headers: {Authorization: localStorage.getItem('token')}}
     );
