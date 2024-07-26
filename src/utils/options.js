@@ -32,23 +32,36 @@ export default function SelectLabels({ data, path, statusName }) {
       'sell': 'update-sell-status',
     }
     const message = {
-      'auth': `
-ار اینکه از خدمات صرافچی استفاده کردید بسیار متشکریم و مفتخریم تا بزودی مجدد سعادت دیدار شما را داشته باشیم.
-با تشکر
+      [`auth-${2}`]: `کاربر گرامی متاسفانه احراز هویت شما بنا به یکی از دلایل زیر ناموفق بوده است.
+- وارد کردن اشتباه نام و نام خانوادگی
+- وارد کردن اشتباه شماره کارت بانکی
+- وارد کردن اشتباه نام بانک
+- وارد کردن اشتباه شماره ملی
+- عدم همخوانی شماره ملی با مشخصات بانکی
+- عدم همخوانی اطلاعات کارت ملی با اطلاعات بانکی
 
-در صورت نیاز به شروع عملیات جدید لطفا از منو اصلی استفده نمایید.`,
-'sell': 'sell',
-'buy': 'buty'
+لطفا" مراحل را مجدد انجام دهید و دقت کنید تا تمام اطلاعات دقیق و کامل نوشته شود`,
+[`auth-${1}`]: `احراز هویت انجام شد.
+
+مدارک شما بررسی و احراز هویت شما موفقیت آمیز بود 
+
+از این پس شما میتوانید به راحتی فقط با چند کلیک ارز بخرید یا بفروشید.
+
+موفق باشید.`,
+[`auth-${0}`]: `در حین بررسی مدارک ارسالی شما مشکلی پیش آمده ،
+ چند لحظه صبر کنید تا توضیحات دقیق در رابطه با مشکل پیش آمده را پشتیبان های ما به اطلاع شما برسانند`,
+
+// 'sell': 'sell',
+// 'buy': 'buty'
     }
     setStatus(newStatus);
     try {
       await axios.post(`http://51.20.225.234:6990/api/${updatePath[path]}`, {
         id: data.id,
-        status: newStatus,
+        status: message[`${updatePath}-${status}`],
       },
       {headers: {Authorization: localStorage.getItem('token')}}
     );
-    console.log(message[path])
       await axios.post('http://51.20.225.234:6990/api/send-messages', {
         telegram_id: data.telegram_id,
         message: message[path],
@@ -77,7 +90,7 @@ export default function SelectLabels({ data, path, statusName }) {
           <MenuItem value={0}>Pending</MenuItem>
           <MenuItem value={1}>{ statusName ? "Done"  : "Approved"}</MenuItem>
           <MenuItem value={2}>Rejected</MenuItem>
-          { path ==='buy' ? <MenuItem value={4}>Waithing</MenuItem>  : null}
+          { path ==='buy' || path ==='auth' ? <MenuItem value={4}>Waithing</MenuItem>  : null}
           { path ==='auth' ? <MenuItem  value={6}>New</MenuItem>  : null}
           { path ==='auth' ? <MenuItem value={5}>Leaved</MenuItem>  : null}
 
