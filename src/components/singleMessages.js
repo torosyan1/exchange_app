@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { TextField, Button, Container, Typography, Box } from '@mui/material';
 import axios from 'axios';
 
-const ApiForm = () => {
+const ApiForm = ({ selectedTelegramId }) => {
   const [inputValue, setInputValue] = useState('');
-  const [telegramId, setTelegramId] = useState('');
+  const [telegramId, setTelegramId] = useState('' || selectedTelegramId);
 
   const handleInputChange = (event) => {
     setInputValue(event.target.value);
@@ -33,8 +33,8 @@ const ApiForm = () => {
 
   return (
     <Container maxWidth="sm">
-      <Box sx={{ mt: 5, textAlign: 'center' }}>
-        <Typography variant="h4" gutterBottom>
+      <Box sx={{ textAlign: 'center' }}>
+        <Typography marginBottom={2} variant="h4" gutterBottom>
           Submit Your Text
         </Typography>
         <TextField
