@@ -4,7 +4,7 @@ import axios from 'axios';
 
 const ApiForm = ({ selectedTelegramId }) => {
   const [inputValue, setInputValue] = useState('');
-  const [telegramId, setTelegramId] = useState('' || selectedTelegramId);
+  const [telegramId, setTelegramId] = useState('' || selectedTelegramId + '');
 
   const handleInputChange = (event) => {
     setInputValue(event.target.value);
