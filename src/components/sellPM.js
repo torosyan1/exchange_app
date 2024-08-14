@@ -9,10 +9,19 @@ import ReactTableUI from "react-table-ui";
 import axios from "axios";
 import SelectLabels from "../utils/options";
 import RefreshIcon from "@mui/icons-material/Refresh";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  IconButton,
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import ApiForm from "./singleMessages";
+import SendIcon from "@mui/icons-material/Send";
 
 import "./style.css";
 import { addHoursToDate } from "../helpers/dateValidation";
-import { IconButton } from "@mui/material";
 
 const SellPMTable = () => {
   const [data, setData] = useState([]);
@@ -20,6 +29,8 @@ const SellPMTable = () => {
   const [pageIndex, setPageIndex] = useState(0); // Start from page 0
   const [pageCount, setPageCount] = useState(0); // Initially set to 0
   const tableInstanceRef = useRef(null);
+  const [open, setOpen] = useState(false);
+  const [selectedTelegramId, setSelectedTelegramId] = useState("");
 
   const fetchData = useCallback(async (pageSize, pageIndex) => {
     try {
@@ -48,6 +59,11 @@ const SellPMTable = () => {
     fetchData(pageSize, pageIndex);
   }, [fetchData, pageSize, pageIndex]); // Depend on pageSize and pageIndex for fetching data
 
+    
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const columns = useMemo(
     () => [
       { Header: "id", accessor: "id" },
@@ -73,6 +89,18 @@ const SellPMTable = () => {
           <SelectLabels data={row.original} path="sell" statusName="Done" />
         ),
       },
+      {
+        Header: "Send Message",
+        accessor: "send_message",
+        Cell: ({ row }) => (
+          <IconButton
+            color="primary"
+            onClick={() => handleClickOpen(row.original.telegram_id)}
+          >
+            <SendIcon />
+          </IconButton>
+        ),
+      },
     ],
     []
   );
@@ -84,6 +112,10 @@ const SellPMTable = () => {
     setPageSize(newPageSize - 40);
   }, []);
 
+  const handleClickOpen = (telegramId) => {
+    setSelectedTelegramId(telegramId);
+    setOpen(true);
+  };
   return (
     <>
       <IconButton
@@ -120,6 +152,19 @@ const SellPMTable = () => {
           fetchData: handleTableChange,
         }}
       />
+            <Dialog open={open} onClose={handleClose}>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            <CloseIcon color="primary" sx={{ width: "36px", height: "36px" }} />
+          </Button>
+        </DialogActions>
+        <DialogContent>
+          <ApiForm
+            selectedTelegramId={selectedTelegramId}
+            onClose={handleClose}
+          />
+        </DialogContent>
+      </Dialog>
     </>
   );
 };
