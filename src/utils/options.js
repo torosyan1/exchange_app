@@ -117,7 +117,7 @@ export default function SelectLabels({ data, path, statusName }) {
           <MenuItem value={0}>Pending</MenuItem>
           <MenuItem value={1}>{ statusName ? "Done"  : "Approved"}</MenuItem>
           <MenuItem value={2}>Rejected</MenuItem>
-          { path ==='buy' || path ==='auth' ? <MenuItem value={4}>Waithing</MenuItem>  : null}
+          { path ==='buy' || path === 'sell' || path ==='auth' ? <MenuItem value={4}>Waithing</MenuItem>  : null}
           { path ==='buy' ? <MenuItem value={8}>Transfering</MenuItem>  : null}
           { path ==='auth' ? <MenuItem  value={6}>New</MenuItem>  : null}
           { path ==='auth' ? <MenuItem value={5}>Leaved</MenuItem>  : null}
