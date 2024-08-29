@@ -68,7 +68,17 @@ const BuyPMSellTable = () => {
     setOpen(false);
   };
 
-  const columns = useMemo(
+    
+// eslint-disable-next-line react-hooks/exhaustive-deps
+const handleStatusChange = (id, newStatus) => {
+  setData((prevData) => 
+    prevData.map((item) => 
+      item.id === id ? { ...item, status: newStatus } : item
+    )
+  );
+};
+
+const columns = useMemo(
     () => [
       { Header: "id", accessor: "id" },
       { Header: "Amount USD", accessor: "amount" },
@@ -98,7 +108,12 @@ const BuyPMSellTable = () => {
         Header: "Status",
         accessor: "status",
         Cell: ({ row }) => (
-          <SelectLabels data={row.original} path="buy" statusName="Done" />
+          <SelectLabels
+            data={row.original}
+            path="buy"
+            statusName="Done"
+            onStatusChange={(newStatus) => handleStatusChange(row.original.id, newStatus)}
+          />
         ),
       },
       {
@@ -114,8 +129,7 @@ const BuyPMSellTable = () => {
         ),
       },
     ],
-    []
-  );
+    [handleStatusChange]);
 
   const handleTableChange = useCallback((paginationOptions) => {
     const { pageIndex: newPageIndex, pageSize: newPageSize } =

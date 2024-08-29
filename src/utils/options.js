@@ -9,7 +9,6 @@ import axios from 'axios';
 const SelectLabels = React.memo(({ data, path, statusName, onStatusChange }) => {
   const [status, setStatus] = useState(path === 'sell' || path === 'buy' ? data.status : data.verified);
   const [alert, setAlert] = useState({ show: false, message: '', severity: 'success' });
-  console.log(data, path, statusName, onStatusChange )
   const handleChange = useCallback(async (event) => {
     const newStatus = event.target.value;
     const updatePath = {

@@ -62,10 +62,18 @@ const SellPMTable = () => {
     return () => clearInterval(interval); // Clean up interval on component unmount
   }, [fetchData, pageSize, pageIndex]); // Depend on pageSize and pageIndex for fetching data
 
-    
   const handleClose = () => {
     setOpen(false);
   };
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+const handleStatusChange = (id, newStatus) => {
+  setData((prevData) => 
+    prevData.map((item) => 
+      item.id === id ? { ...item, status: newStatus } : item
+    )
+  );
+};
 
   const columns = useMemo(
     () => [
@@ -89,7 +97,12 @@ const SellPMTable = () => {
         Header: "Status",
         accessor: "status",
         Cell: ({ row }) => (
-          <SelectLabels data={row.original} path="sell" statusName="Done" />
+          <SelectLabels
+            data={row.original}
+            path="sell" 
+            statusName="Done"
+            onStatusChange={(newStatus) => handleStatusChange(row.original.id, newStatus)}
+          />
         ),
       },
       {
@@ -105,8 +118,8 @@ const SellPMTable = () => {
         ),
       },
     ],
-    []
-  );
+   [handleStatusChange]);
+
 
   const handleTableChange = useCallback((paginationOptions) => {
     const { pageIndex: newPageIndex, pageSize: newPageSize } =

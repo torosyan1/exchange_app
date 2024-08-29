@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
 import ReactTableUI from 'react-table-ui';
 import axios from 'axios';
@@ -61,8 +62,8 @@ const DataTable = () => {
     setOpen(false);
   };
 
-// eslint-disable-next-line react-hooks/exhaustive-deps
 const handleStatusChange = (id, newStatus) => {
+  console.log(id, newStatus)
     setData((prevData) => 
       prevData.map((item) => 
         item.id === id ? { ...item, status: newStatus } : item
