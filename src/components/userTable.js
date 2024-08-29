@@ -1,32 +1,20 @@
-import React, {
-  useState,
-  useEffect,
-  useMemo,
-  useRef,
-  useCallback,
-} from "react";
-import ReactTableUI from "react-table-ui";
-import axios from "axios";
-import SelectLabels from "../utils/options";
-import SendIcon from "@mui/icons-material/Send";
-import RefreshIcon from "@mui/icons-material/Refresh";
-import { addHoursToDate } from "../helpers/dateValidation";
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  IconButton,
-} from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import ApiForm from "./singleMessages";
-import "./style.css";
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
+import ReactTableUI from 'react-table-ui';
+import axios from 'axios';
+import SelectLabels from '../utils/options';
+import SendIcon from '@mui/icons-material/Send';
+import RefreshIcon from '@mui/icons-material/Refresh';
+import { addHoursToDate } from '../helpers/dateValidation';
+import { Button, Dialog, DialogActions, DialogContent, IconButton } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import ApiForm from './singleMessages';
+import './style.css';
 
 const DataTable = () => {
   const [data, setData] = useState([]);
   const [pageSize, setPageSize] = useState(10);
-  const [pageIndex, setPageIndex] = useState(0); // Start from page 0
-  const [pageCount, setPageCount] = useState(0); // Initially set to 0
+  const [pageIndex, setPageIndex] = useState(0);
+  const [pageCount, setPageCount] = useState(0);
   const [open, setOpen] = useState(false);
   const [selectedTelegramId, setSelectedTelegramId] = useState("");
 
@@ -45,22 +33,24 @@ const DataTable = () => {
           headers: { Authorization: localStorage.getItem("token") },
         }
       );
-      const data = response.data.data
+      const sortedData = response.data.data
         .reverse()
         .sort((a, b) => a.verified - b.verified);
-      setData(data);
+      setData(sortedData);
       setPageCount(Math.ceil(response.data.totoalCount[0].total / pageSize));
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-  }, []); // Depend on pageSize and pageIndex for fetching data
+  }, []);
 
   useEffect(() => {
     fetchData(pageSize, pageIndex);
-    const interval = setInterval(()=>fetchData(pageSize, pageIndex), 10000); // Polling every 10 seconds
+    const intervalId = setInterval(() => {
+      fetchData(pageSize, pageIndex);
+    }, 10000);
 
-    return () => clearInterval(interval); // Clean up interval on component unmount
-  }, [fetchData, pageSize, pageIndex]); // Depend on pageSize and pageIndex for fetching data
+    return () => clearInterval(intervalId);
+  }, [fetchData, pageSize, pageIndex]);
 
   const handleClickOpen = (telegramId) => {
     setSelectedTelegramId(telegramId);
@@ -71,56 +61,69 @@ const DataTable = () => {
     setOpen(false);
   };
 
-  const columns = useMemo(
-    () => [
-      { Header: "id", accessor: "id" },
-      { Header: "First Name", accessor: "first_name" },
-      { Header: "Last Name", accessor: "last_name" },
-      { Header: "Bank Card Number", accessor: "bank_card_number" },
-      { Header: "Bank Name", accessor: "bank_name" },
-      { Header: "ID Number", accessor: "id_number" },
-      {
-        Header: "Files",
-        accessor: "files",
-        Cell: ({ value }) =>
-          JSON.parse(value)?.map((file, i) => (
-            <a href={file} key={i}>
-              {i}
-            </a>
-          )),
-      },
-      { Header: "Telegram ID", accessor: "telegram_id" },
-      {
-        Header: "created_at",
-        accessor: "created_at",
-        Cell: ({ value }) => addHoursToDate(value, 0),
-      },
-      {
-        Header: "Status",
-        accessor: "status",
-        Cell: ({ row }) => <SelectLabels data={row.original} path="auth" />,
-      },
-      {
-        Header: "Send Message",
-        accessor: "send_message",
-        Cell: ({ row }) => (
-          <IconButton
-            color="primary"
-            onClick={() => handleClickOpen(row.original.telegram_id)}
-          >
-            <SendIcon />
-          </IconButton>
-        ),
-      },
-    ],
-    []
-  );
+// eslint-disable-next-line react-hooks/exhaustive-deps
+const handleStatusChange = (id, newStatus) => {
+    setData((prevData) => 
+      prevData.map((item) => 
+        item.id === id ? { ...item, status: newStatus } : item
+      )
+    );
+  };
+
+  const columns = useMemo(() => [
+    { Header: "id", accessor: "id" },
+    { Header: "First Name", accessor: "first_name" },
+    { Header: "Last Name", accessor: "last_name" },
+    { Header: "Bank Card Number", accessor: "bank_card_number" },
+    { Header: "Bank Name", accessor: "bank_name" },
+    { Header: "ID Number", accessor: "id_number" },
+    {
+      Header: "Files",
+      accessor: "files",
+      Cell: ({ value }) =>
+        JSON.parse(value)?.map((file, i) => (
+          <a href={file} key={i}>
+            {i}
+          </a>
+        )),
+    },
+    { Header: "Telegram ID", accessor: "telegram_id" },
+    {
+      Header: "Created at",
+      accessor: "created_at",
+      Cell: ({ value }) => addHoursToDate(value, 0),
+    },
+    {
+      Header: "Status",
+      accessor: "status",
+      Cell: ({ row }) => (
+        <SelectLabels
+          data={row.original}
+          path="auth"
+          statusName="Done"
+          onStatusChange={(newStatus) => handleStatusChange(row.original.id, newStatus)}
+        />
+      ),
+    },
+    {
+      Header: "Send Message",
+      accessor: "send_message",
+      Cell: ({ row }) => (
+        <IconButton
+          color="primary"
+          onClick={() => handleClickOpen(row.original.telegram_id)}
+        >
+          <SendIcon />
+        </IconButton>
+      ),
+    },
+  ], [handleStatusChange]);
 
   const handleTableChange = useCallback((paginationOptions) => {
     const { pageIndex: newPageIndex, pageSize: newPageSize } =
       paginationOptions;
     setPageIndex(newPageIndex);
-    setPageSize(newPageSize - 40);
+    setPageSize(newPageSize);
   }, []);
 
   return (
