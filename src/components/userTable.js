@@ -53,10 +53,13 @@ const DataTable = () => {
     } catch (error) {
       console.error("Error fetching data:", error);
     }
-  }, []);
+  }, []); // Depend on pageSize and pageIndex for fetching data
 
   useEffect(() => {
     fetchData(pageSize, pageIndex);
+    const interval = setInterval(()=>fetchData(pageSize, pageIndex), 10000); // Polling every 10 seconds
+
+    return () => clearInterval(interval); // Clean up interval on component unmount
   }, [fetchData, pageSize, pageIndex]); // Depend on pageSize and pageIndex for fetching data
 
   const handleClickOpen = (telegramId) => {
@@ -130,7 +133,7 @@ const DataTable = () => {
           top: "0%",
           color: "white",
         }}
-        onClick={() => fetchData(pageSize, pageIndex)}
+        onClick={() => fetchData()}
       >
         <RefreshIcon
           sx={{

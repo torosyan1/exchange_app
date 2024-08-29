@@ -58,9 +58,12 @@ const BuyPMSellTable = () => {
 
   useEffect(() => {
     fetchData(pageSize, pageIndex);
+    const interval = setInterval(()=>fetchData(pageSize, pageIndex), 10000); // Polling every 10 seconds
+
+    return () => clearInterval(interval); // Clean up interval on component unmount
   }, [fetchData, pageSize, pageIndex]); // Depend on pageSize and pageIndex for fetching data
 
-  
+    
   const handleClose = () => {
     setOpen(false);
   };

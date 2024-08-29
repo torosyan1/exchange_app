@@ -87,7 +87,6 @@ export default function SelectLabels({ data, path, statusName }) {
 لطفا چند دقیقه صبر کنید تا اطلاعات ارسالی شما بررسی و تایید شود.`,
     }
     setStatus(newStatus);
-    console.log(message[`${path}-${newStatus}`], `${path}-${newStatus}`)
     try {
       await axios.post(`http://51.20.225.234:6990/api/${updatePath[path]}`, {
         id: data.id,
