@@ -63,7 +63,6 @@ const DataTable = () => {
   };
 
 const handleStatusChange = (id, newStatus) => {
-  console.log(id, newStatus)
     setData((prevData) => 
       prevData.map((item) => 
         item.id === id ? { ...item, status: newStatus } : item
