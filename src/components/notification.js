@@ -6,6 +6,7 @@ import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { useSnackbar } from 'notistack';
+import { Divider } from '@mui/material';
 
 function NotificationPopup() {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -92,9 +93,11 @@ function NotificationPopup() {
           {notifications.length > 0 ? (
             notifications.map((notification, index) => (
               <Box key={index} sx={{ marginTop: 1 }}>
-                <Typography variant="body2">{notification.type}</Typography>
+                <Divider/>
+                <Typography variant="body1"><a href={ notification.table === 'buy_trx' ? '/buypm' : notification.table === 'sell_trx' ? '/sellpm' : notification.table === 'users'? '/users': '#'}>You have {notification.table} update: id: {notification.data[1]}</a></Typography>
                 {/* Show new items count */}
                 {notification.isNew && <Typography variant="caption" color="textSecondary">New</Typography>}
+                <Divider/>
               </Box>
             ))
           ) : (
