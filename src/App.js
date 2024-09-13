@@ -23,6 +23,7 @@ import SellIcon from '@mui/icons-material/Sell';
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import NotificationPopup from './components/notification';
 
 const drawerWidth = 240;
 
@@ -151,6 +152,9 @@ export default function App({ Component }) {
           <Typography variant="h6" noWrap component="div">
             Sarafchi Exchange
           </Typography>
+          <div style={{ marginLeft: 'auto' }}>
+          <NotificationPopup/>
+          </div>
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>
@@ -213,7 +217,7 @@ export default function App({ Component }) {
         </List>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3, marginTop: '5%' }}>
-        <Component /> {/* Render the passed Component */}
+        <Component /> Render the passed Component
       </Box>
     </Box>
   );

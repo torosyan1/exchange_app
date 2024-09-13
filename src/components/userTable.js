@@ -4,7 +4,7 @@ import ReactTableUI from 'react-table-ui';
 import axios from 'axios';
 import SelectLabels from '../utils/options';
 import SendIcon from '@mui/icons-material/Send';
-import RefreshIcon from '@mui/icons-material/Refresh';
+// import RefreshIcon from '@mui/icons-material/Refresh';
 import { addHoursToDate } from '../helpers/dateValidation';
 import { Button, Dialog, DialogActions, DialogContent, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
@@ -138,14 +138,14 @@ const handleStatusChange = (id, newStatus) => {
         }}
         onClick={() => fetchData()}
       >
-        <RefreshIcon
+        {/* <RefreshIcon
           sx={{
             width: "48px",
             height: "48px",
             display: "flex",
             justifyContent: "flex-end",
           }}
-        />
+        /> */}
       </IconButton>
       <ReactTableUI
         title="Sarafchi Exchange Table"
