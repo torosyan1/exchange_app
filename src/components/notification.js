@@ -16,7 +16,7 @@ function NotificationPopup() {
 
   const fetchNotifications = useCallback(async () => {
     try {
-      const response = await fetch('http://localhost:6990/api/get-notification', {
+      const response = await fetch('http://51.20.225.234:6990/api/get-notification', {
         headers: { Authorization: localStorage.getItem("token") },
       });
       const data = await response.json();
