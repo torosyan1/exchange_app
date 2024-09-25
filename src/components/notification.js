@@ -12,8 +12,16 @@ function NotificationPopup() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
-  const [newItemsCount, setNewItemsCount] = useState(0); // Track new items count
+  const [newItemsCount, setNewItemsCount] = useState(0);
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+
+  // Load notifications from localStorage on initial render
+  useEffect(() => {
+    const storedNotifications = JSON.parse(localStorage.getItem('notifications')) || [];
+    setNotifications(storedNotifications.reverse());
+    const unread = storedNotifications.filter((n) => n.isNew).length;
+    setUnreadCount(unread);
+  }, []);
 
   const fetchNotifications = useCallback(async () => {
     try {
@@ -21,22 +29,31 @@ function NotificationPopup() {
         headers: { Authorization: localStorage.getItem("token") },
       });
       const data = await response.json();
-      const newNotifications = data.data;
+      
+      const existingNotifications = JSON.parse(localStorage.getItem('notifications')) || [];
 
-      // Calculate new items count
-      const newItems = newNotifications.filter(notification => !notifications.some(n => n.id === notification.id));
-      const newItemsCount = newItems.length;
+      const newNotifications = data.data.map((notification) => {
+        const existingNotification = existingNotifications.find((n) => n.id === notification.id);
+        
+        // If notification exists, retain its current 'isNew' value; otherwise set to true
+        return {
+          ...notification,
+          isNew: existingNotification ? existingNotification.isNew : true,
+        };
+      });
 
-      // Update state and global data if there are changes
-      if (JSON.stringify(newNotifications) !== JSON.stringify(global.notificationData)) {
-        global.notificationData = newNotifications;
-        setNotifications(newNotifications);
-        setUnreadCount(newNotifications.length);
-        setNewItemsCount(newItemsCount);
+      // Update state and localStorage only if there are new notifications
+      if (JSON.stringify(newNotifications) !== JSON.stringify(existingNotifications)) {
+        setNotifications(newNotifications.reverse());
+        localStorage.setItem('notifications', JSON.stringify(newNotifications));
 
-        // Show Snackbar only if the popup is not open
-        if (!anchorEl) {
-          enqueueSnackbar('New notifications received!', { variant: 'info' });
+        const newItems = newNotifications.filter((n) => n.isNew);
+        setUnreadCount(newItems.length);
+        setNewItemsCount(newItems.length);
+
+        // Show Snackbar for new notifications
+        if (newItems.length > 0) {
+          enqueueSnackbar(`${newItems.length} new notification(s) received!`, { variant: 'info' });
         } else {
           closeSnackbar();
         }
@@ -44,7 +61,7 @@ function NotificationPopup() {
     } catch (error) {
       console.error('Failed to fetch notifications:', error);
     }
-  }, [anchorEl, notifications, enqueueSnackbar, closeSnackbar]);
+  }, [enqueueSnackbar, closeSnackbar]);
 
   useEffect(() => {
     const intervalId = setInterval(fetchNotifications, 1000); // Fetch every second
@@ -53,12 +70,20 @@ function NotificationPopup() {
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
-    setUnreadCount(0); // Reset unread count when popup is opened
-    setNewItemsCount(0); // Reset new items count when popup is opened
+
   };
 
   const handleClose = () => {
     setAnchorEl(null);
+        // Mark all notifications as read and update localStorage
+        const updatedNotifications = notifications.map((notification) => ({
+          ...notification,
+          isNew: false,
+        }));
+        setNotifications(updatedNotifications.reverse());
+        setUnreadCount(0);
+        setNewItemsCount(0);
+        localStorage.setItem('notifications', JSON.stringify(updatedNotifications));
   };
 
   const open = Boolean(anchorEl);
@@ -87,17 +112,42 @@ function NotificationPopup() {
           vertical: 'top',
           horizontal: 'center',
         }}
+        sx={{ boxShadow: 3 }} // Add shadow to the popover
       >
-        <Box p={2} sx={{ width: 300 }}>
-          <Typography variant="h6">Notifications</Typography>
+        <Box p={2} sx={{ width: 300, backgroundColor: '#fff', borderRadius: 1 }}>
+          <Typography variant="h6" sx={{ fontWeight: 'bold', mb: 1 }}>
+            Notifications
+          </Typography>
           {notifications.length > 0 ? (
             notifications.map((notification, index) => (
               <Box key={index} sx={{ marginTop: 1 }}>
-                <Divider/>
-                <Typography variant="body1"><a href={ notification.table === 'buy_trx' ? '/buypm' : notification.table === 'sell_trx' ? '/sellpm' : notification.table === 'users'? '/users': '#'}>You have {notification.table} update: id: {notification.data[1]}</a></Typography>
-                {/* Show new items count */}
-                {notification.isNew && <Typography variant="caption" color="textSecondary">New</Typography>}
-                <Divider/>
+                <Divider />
+                <Typography variant="body1" sx={{ display: 'flex', alignItems: 'center' }}>
+                  {/* Red dot for new notifications */}
+                  {notification.isNew && (
+                    <Box
+                      sx={{
+                        width: 8,
+                        height: 8,
+                        backgroundColor: 'red',
+                        borderRadius: '50%',
+                        marginRight: 1,
+                      }}
+                    />
+                  )}
+                  <a href={
+                    notification.table === 'buy_trx' ? '/buypm' : 
+                    notification.table === 'sell_trx' ? '/sellpm' : 
+                    notification.table === 'users' ? '/users' : 
+                    '#'
+                  }>
+                    You have {notification.table} update: id: {notification.data[1]}
+                  </a>
+                </Typography>
+                {notification.isNew && (
+                  <Typography variant="caption" color="textSecondary">New</Typography>
+                )}
+                <Divider />
               </Box>
             ))
           ) : (
@@ -113,6 +163,6 @@ function NotificationPopup() {
       </Popover>
     </div>
   );
-}
+};
 
 export default NotificationPopup;

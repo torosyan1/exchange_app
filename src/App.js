@@ -22,12 +22,12 @@ import MessageIcon from '@mui/icons-material/Message';
 import SellIcon from '@mui/icons-material/Sell';
 import ShoppingBagIcon from '@mui/icons-material/ShoppingBag';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom';
 import NotificationPopup from './components/notification';
+import Badge from '@mui/material/Badge';
 
 const drawerWidth = 240;
 
-// Styles for the drawer when it is open
 const openedMixin = (theme) => ({
   width: drawerWidth,
   transition: theme.transitions.create('width', {
@@ -37,7 +37,6 @@ const openedMixin = (theme) => ({
   overflowX: 'hidden',
 });
 
-// Styles for the drawer when it is closed
 const closedMixin = (theme) => ({
   transition: theme.transitions.create('width', {
     easing: theme.transitions.easing.sharp,
@@ -50,7 +49,6 @@ const closedMixin = (theme) => ({
   },
 });
 
-// Drawer header style
 const DrawerHeader = styled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
@@ -59,7 +57,6 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   ...theme.mixins.toolbar,
 }));
 
-// AppBar style
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== 'open',
 })(({ theme, open }) => ({
@@ -78,7 +75,6 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 
-// Drawer style
 const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
     width: drawerWidth,
@@ -96,42 +92,59 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
   }),
 );
 
-// Main component
 export default function App({ Component }) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
 
-  // Handle opening the drawer
+  // State to keep track of notifications
+  const [newNotifications, setNewNotifications] = React.useState({});
+
+  const checkNewNotifications = () => {
+    const data = JSON.parse(localStorage.getItem('notifications')) || [];
+    const notificationsStatus = {};
+
+    ['users', 'rate', 'messages', 'buypm', 'sellpm'].forEach((table) => {
+      notificationsStatus[table] = data.some(item => item.table === table && item.isNew);
+    });
+
+    setNewNotifications(notificationsStatus);
+  };
+
+  // Set interval to check for new notifications every 10 seconds
+  React.useEffect(() => {
+    checkNewNotifications(); // Initial check
+    const interval = setInterval(checkNewNotifications, 1000); // Check every 10 seconds
+
+    return () => clearInterval(interval); // Cleanup on unmount
+  }, []);
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
 
-  // Handle closing the drawer
   const handleDrawerClose = () => {
     setOpen(false);
   };
 
-  // Handle navigation
   const handleNavigation = (path) => {
-    console.log(path)
-    if(path === '/logout') {
+    if (path === '/logout') {
       localStorage.removeItem('token');
-      navigate('/')
+      navigate('/');
     } else {
       navigate(path);
     }
   };
 
-  // Map for icons
   const iconMap = {
     'Users': <GroupIcon />,
     'Rate': <TrendingUpIcon />,
     'Messages': <MessageIcon />,
     'BuyPM': <ShoppingBagIcon />,
     'SellPM': <SellIcon />,
-    'Logout': <LogoutIcon/>
+    'Logout': <LogoutIcon />
   };
+
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -153,7 +166,7 @@ export default function App({ Component }) {
             Sarafchi Exchange
           </Typography>
           <div style={{ marginLeft: 'auto' }}>
-          <NotificationPopup/>
+            <NotificationPopup />
           </div>
         </Toolbar>
       </AppBar>
@@ -168,7 +181,7 @@ export default function App({ Component }) {
           {['Users', 'Rate', 'Messages', 'BuyPM', 'SellPM'].map((text) => (
             <ListItem key={text} disablePadding sx={{ display: 'block' }}>
               <ListItemButton
-                onClick={() => handleNavigation(`/${text.toLowerCase()}`)} // Navigate on click
+                onClick={() => handleNavigation(`/${text.toLowerCase()}`)}
                 sx={{
                   minHeight: 48,
                   justifyContent: open ? 'initial' : 'center',
@@ -182,7 +195,13 @@ export default function App({ Component }) {
                     justifyContent: 'center',
                   }}
                 >
-                  {iconMap[text]} {/* Use iconMap for icons */}
+                  <Badge
+                    color="error"
+                    variant="dot"
+                    invisible={!newNotifications[text.toLowerCase()]}
+                  >
+                    {iconMap[text]}
+                  </Badge>
                 </ListItemIcon>
                 <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
@@ -194,7 +213,7 @@ export default function App({ Component }) {
           {['Logout'].map((text) => (
             <ListItem key={text} disablePadding sx={{ display: 'block' }}>
               <ListItemButton
-                onClick={() => handleNavigation(`/${text.toLowerCase()}`)} // Navigate on click
+                onClick={() => handleNavigation(`/${text.toLowerCase()}`)}
                 sx={{
                   minHeight: 48,
                   justifyContent: open ? 'initial' : 'center',
@@ -208,7 +227,7 @@ export default function App({ Component }) {
                     justifyContent: 'center',
                   }}
                 >
-                  {iconMap[text]} {/* Use iconMap for icons */}
+                  {iconMap[text]}
                 </ListItemIcon>
                 <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
