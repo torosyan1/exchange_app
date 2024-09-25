@@ -141,7 +141,7 @@ function NotificationPopup() {
                     notification.table === 'users' ? '/users' : 
                     '#'
                   }>
-                    You have {notification.table} update: id: {notification.data[1]}
+                    You have {notification.table} update
                   </a>
                 </Typography>
                 {notification.isNew && (
