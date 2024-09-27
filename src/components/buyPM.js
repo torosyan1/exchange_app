@@ -70,13 +70,13 @@ const BuyPMSellTable = () => {
 
     
 // eslint-disable-next-line react-hooks/exhaustive-deps
-const handleStatusChange = (id, newStatus) => {
-  setData((prevData) => 
-    prevData.map((item) => 
+const handleStatusChange = useCallback((id, newStatus) => {
+  setData((prevData) =>
+    prevData.map((item) =>
       item.id === id ? { ...item, status: newStatus } : item
     )
   );
-};
+}, [data]);
 
 const columns = useMemo(
     () => [

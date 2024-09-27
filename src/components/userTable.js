@@ -10,7 +10,6 @@ import { Button, Dialog, DialogActions, DialogContent, IconButton } from '@mui/m
 import CloseIcon from '@mui/icons-material/Close';
 import ApiForm from './singleMessages';
 import './style.css';
-
 const DataTable = () => {
   const [data, setData] = useState([]);
   const [pageSize, setPageSize] = useState(10);
@@ -62,13 +61,13 @@ const DataTable = () => {
     setOpen(false);
   };
 
-const handleStatusChange = (id, newStatus) => {
-    setData((prevData) => 
-      prevData.map((item) => 
+  const handleStatusChange = useCallback((id, newStatus) => {
+    setData((prevData) =>
+      prevData.map((item) =>
         item.id === id ? { ...item, status: newStatus } : item
       )
     );
-  };
+  }, [data]);
 
   const columns = useMemo(() => [
     { Header: "id", accessor: "id" },
@@ -101,7 +100,9 @@ const handleStatusChange = (id, newStatus) => {
           data={row.original}
           path="auth"
           statusName="Done"
-          onStatusChange={(newStatus) => handleStatusChange(row.original.id, newStatus)}
+          onStatusChange={(newStatus) =>
+            handleStatusChange(row.original.id, newStatus)
+          }
         />
       ),
     },

@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo, memo } from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
@@ -7,6 +7,7 @@ import Stack from '@mui/material/Stack';
 import axios from 'axios';
 
 const SelectLabels = React.memo(({ data, path, statusName, onStatusChange }) => {
+  console.log(data)
   const [status, setStatus] = useState(path === 'sell' || path === 'buy' ? data.status : data.verified);
   const [alert, setAlert] = useState({ show: false, message: '', severity: 'success' });
 
@@ -131,4 +132,5 @@ const SelectLabels = React.memo(({ data, path, statusName, onStatusChange }) => 
   );
 });
 
-export default SelectLabels;
+export default memo(SelectLabels); // This prevents unnecessary re-renders
+
