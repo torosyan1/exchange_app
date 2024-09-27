@@ -7,7 +7,6 @@ import Stack from '@mui/material/Stack';
 import axios from 'axios';
 
 const SelectLabels = React.memo(({ data, path, statusName, onStatusChange }) => {
-  console.log(data)
   const [status, setStatus] = useState(path === 'sell' || path === 'buy' ? data.status : data.verified);
   const [alert, setAlert] = useState({ show: false, message: '', severity: 'success' });
 
