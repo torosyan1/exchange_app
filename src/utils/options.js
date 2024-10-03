@@ -119,7 +119,6 @@ const SelectLabels = React.memo(({ data, path, statusName, onStatusChange }) => 
           {(path === 'buy' || path === 'sell' || path === 'auth') && <MenuItem value={4}>Waiting</MenuItem>}
           {path === 'buy' && <MenuItem value={8}>Transferring</MenuItem>}
           {path === 'auth' && <MenuItem value={6}>New</MenuItem>}
-          {path === 'auth' && <MenuItem value={5}>Leaved</MenuItem>}
         </Select>
       </FormControl>
       {alert.show && (
