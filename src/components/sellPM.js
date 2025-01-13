@@ -35,7 +35,7 @@ const SellPMTable = () => {
   const fetchData = useCallback(async (pageSize, pageIndex) => {
     try {
       let urlRequest = 'get-sell-data'
-      if(window.location.href.split('/')[window.location.href.split('/').length-1] === 'buyusdtpm'){
+      if(window.location.href.split('/')[window.location.href.split('/').length-1] === 'sellusdtpm'){
         urlRequest = 'get-usdt-sell-data'
       }
       const offset = pageIndex * pageSize;
