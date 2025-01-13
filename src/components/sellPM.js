@@ -34,9 +34,13 @@ const SellPMTable = () => {
 
   const fetchData = useCallback(async (pageSize, pageIndex) => {
     try {
+      let urlRequest = 'get-sell-data'
+      if(window.location.href.split('/')[window.location.href.split('/').length-1] === 'buyusdtpm'){
+        urlRequest = 'get-usdt-sell-data'
+      }
       const offset = pageIndex * pageSize;
       const response = await axios.get(
-        "http://51.20.225.234:6990/api/get-sell-data",
+        `http://51.20.225.234:6990/api/${urlRequest}`,
         {
           params: {
             limit: pageSize,
@@ -84,6 +88,7 @@ const SellPMTable = () => {
         accessor: "amount_toman",
         Cell: ({ row }) => row.original.amount * row.original.current_rate,
       },
+      { Header: "Hash code", accessor: "hash_code" },
       { Header: "Current rate", accessor: "current_rate" },
       { Header: "Vaucher code", accessor: "vaucher_code" },
       { Header: "Vaucher code", accessor: "activation_code" },

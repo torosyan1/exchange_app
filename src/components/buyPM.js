@@ -32,12 +32,15 @@ const BuyPMSellTable = () => {
   const [selectedTelegramId, setSelectedTelegramId] = useState("");
 
   const tableInstanceRef = useRef(null);
-
   const fetchData = useCallback(async (pageSize, pageIndex) => {
     try {
+      let urlRequest = 'get-buy-data'
+      if(window.location.href.split('/')[window.location.href.split('/').length-1] === 'buyusdtpm'){
+        urlRequest = 'get-usdt-buy-data'
+      }
       const offset = pageIndex * pageSize;
       const response = await axios.get(
-        "http://51.20.225.234:6990/api/get-buy-data",
+        `http://51.20.225.234:6990/api/${urlRequest}`,
         {
           params: {
             limit: pageSize,
@@ -89,6 +92,7 @@ const columns = useMemo(
       },
       { Header: "Current rate", accessor: "current_rate" },
       { Header: "Telegram ID", accessor: "telegram_id" },
+      { Header: "Wallet address", accessor: "wallet_address" },
       {
         Header: "Created",
         accessor: "created_at",

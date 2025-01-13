@@ -25,6 +25,8 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { useNavigate } from 'react-router-dom';
 import NotificationPopup from './components/notification';
 import Badge from '@mui/material/Badge';
+import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 
 const drawerWidth = 240;
 
@@ -104,7 +106,7 @@ export default function App({ Component }) {
     const data = JSON.parse(localStorage.getItem('notifications')) || [];
     const notificationsStatus = {};
 
-    ['users', 'rate', 'messages', 'buypm', 'sellpm'].forEach((table) => {
+    ['users', 'rate', 'messages', 'BuyPM', 'SellPM', 'buyUSDTpm', 'sellUSDTpm'].forEach((table) => {
       notificationsStatus[table] = data.some(item => item.table === table && item.isNew);
     });
 
@@ -142,7 +144,9 @@ export default function App({ Component }) {
     'Messages': <MessageIcon />,
     'BuyPM': <ShoppingBagIcon />,
     'SellPM': <SellIcon />,
-    'Logout': <LogoutIcon />
+    'Logout': <LogoutIcon />,
+    'buyUSDTpm': <MonetizationOnIcon />,
+    'sellUSDTpm': <AttachMoneyIcon />,
   };
 
   return (
@@ -178,7 +182,7 @@ export default function App({ Component }) {
         </DrawerHeader>
         <Divider />
         <List>
-          {['Users', 'Rate', 'Messages', 'BuyPM', 'SellPM'].map((text) => (
+          {['Users', 'Rate', 'Messages', 'BuyPM', 'SellPM', 'sellUSDTpm', 'buyUSDTpm'].map((text) => (
             <ListItem key={text} disablePadding sx={{ display: 'block' }}>
               <ListItemButton
                 onClick={() => handleNavigation(`/${text.toLowerCase()}`)}

@@ -30,6 +30,8 @@ root.render(
           <Route path='/messages' element={<PrivateRoute element={App} Component={MessagesForm} />} />
           <Route path='/sellpm' element={<PrivateRoute element={App} Component={SellPMTable} />} />
           <Route path='/buypm' element={<PrivateRoute element={App} Component={BuyPMSellTable} />} />
+          <Route path='/sellUSDTpm' element={<PrivateRoute element={App} Component={SellPMTable} />} />
+          <Route path='/buyUSDTpm' element={<PrivateRoute element={App} Component={BuyPMSellTable} />} />
         </Routes>
       </AuthProvider>
     </Router>
